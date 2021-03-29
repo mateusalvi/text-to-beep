@@ -2,11 +2,11 @@ import PySimpleGUI as sg
 
 class interface:
     sg.theme('Light Blue 2')                                                                                                    #Definição do tema à ser usado
-    play_button = sg.Button('Tocar música',font='halvetica',disabled=False,key='play_button')                                   #Estado inicial do botão play
-    stop_button = sg.Button('Parar música',font='halvetica',disabled=True,key='stop_button')                                    #Estado inicial do botão Stop
-    text_box    = sg.Multiline(default_text='',size=(75, 25),font='halvetica',key='text_box')                                   #Caixa de texto
+    play_button = sg.Button('Tocar música',font='Helvetica',disabled=False,key='play_button')                                   #Estado inicial do botão play
+    stop_button = sg.Button('Parar música',font='Helvetica',disabled=True,key='stop_button')                                    #Estado inicial do botão Stop
+    text_box    = sg.Multiline(default_text='',size=(75, 25),font='Helvetica',key='text_box')                                   #Caixa de texto
     layout =[ [sg.Text (" ",size=(10, 1))],                                                                                     #Tabela com os elementos da interface (linhas e colunas)
-            [sg.Text (" ",size=(14, 1)), sg.Text("TEXT-TO-BEEP",justification='center',size=(20, 1),font=['halvetica',30]), ],
+            [sg.Text (" ",size=(14, 1)), sg.Text("TEXT-TO-BEEP",justification='center',size=(20, 1),font=['Helvetica',30]), ],
             [text_box, ],
             [sg.Text (" ",size=(10, 1))],
             [sg.Text (" ",size=(20, 2)), play_button, sg.Text(" ",size=(10, 2)), stop_button, ],
