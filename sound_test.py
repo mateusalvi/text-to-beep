@@ -30,13 +30,13 @@ class MusicTest(unittest.TestCase):
         self.music.setName("def")
         self.assertEqual("def", self.music.getName())
     
-    def test_setNotes1(self):
-        self.music.setNotes([('A',5,"acoustic grand piano")])
-        self.assertListEqual([('A',5,"acoustic grand piano")], self.music.getNotes())
+    def test_setSounds1(self):
+        self.music.setSounds([('A',5,"acoustic grand piano")])
+        self.assertListEqual([('A',5,"acoustic grand piano")], self.music.getSounds())
     
-    def test_setNotes2(self):
-        self.music.setNotes([('C',8,"harpsichord")])
-        self.assertListEqual([('C',8,"harpsichord")], self.music.getNotes())
+    def test_setSound2(self):
+        self.music.setSounds([('C',8,"harpsichord")])
+        self.assertListEqual([('C',8,"harpsichord")], self.music.getSounds())
 
 
 class MIDITest(unittest.TestCase):
@@ -91,70 +91,73 @@ class MIDITest(unittest.TestCase):
 					('D',5,"ocarina"),
 					('C',5,"ocarina"),
 					('D',5,"ocarina")]
-    test_sounds = [   ('-',0,"ocarina"),
-                        ('C',1,"acoustic grand piano"),
-                        ('E',2,"harpsichord"),
-                        ('G',3,"violin")]
+    test_sounds = [ ('-',0,"ocarina"),
+                    ('C',1,"acoustic grand piano"),
+                    ('E',2,"harpsichord"),
+                    ('G',3,"violin")]
     music_sample = Music(song_of_healing, 100, 100, "Song of Healing")
     music_sample2 = Music(test_sounds, 60, 60, "Music sample2")
 
     def setUp(self):
-        self.midi = MIDI(Music([('C',8,"harpsichord")], 100, 60, "midi_music"))
+        self.midi = MIDI(self.music_sample)
     
-    def test_midiNote_valid1(self):
-        midi_note = self.midi.midiNote('C', 0)
+    def test_midiNoteCode_valid1(self):
+        midi_note = self.midi.midiNoteCode('C', 0)
         self.assertEqual(0, midi_note)
 
-    def test_midiNote_valid2(self):
-        midi_note = self.midi.midiNote('G', 10)
+    def test_midiNoteCode_valid2(self):
+        midi_note = self.midi.midiNoteCode('G', 10)
         self.assertEqual(127, midi_note)
 
     '''
-    def test_midiNote_invalid(self):
+    def test_midiNoteCode_invalid(self):
         with self.assertRaises(ValueError):
-            self.midi.midiNote("G#", 10)
+            self.midi.midiNoteCode("G#", 10)
     '''
 
-    def test_midiNote_invalid_octave(self):
-        midi_note = self.midi.midiNote('G#', 10)
+    def test_midiNoteCode_invalid_octave(self):
+        midi_note = self.midi.midiNoteCode('G#', 10)
         self.assertEqual(None, midi_note)
     
-    def test_midiNote_invalid_note(self):
-        midi_note = self.midi.midiNote('K', 5)
+    def test_midiNoteCode_invalid_note(self):
+        midi_note = self.midi.midiNoteCode('K', 5)
         self.assertEqual(None, midi_note)
     
-    def test_midiNote_invalid_type1(self):
-        midi_note = self.midi.midiNote(5, 5)
+    def test_midiNoteCode_invalid_type1(self):
+        midi_note = self.midi.midiNoteCode(5, 5)
         self.assertEqual(None, midi_note)
     
-    def test_midiNote_invalid_type2(self):
-        midi_note = self.midi.midiNote('C', 'G')
+    def test_midiNoteCode_invalid_type2(self):
+        midi_note = self.midi.midiNoteCode('C', 'G')
         self.assertEqual(None, midi_note)
     
-    def test_midiInstrument_valid1(self):
-        midi_instrument = self.midi.midiInstrument("acoustic grand piano")
+    def test_midiInstrumentCode_valid1(self):
+        midi_instrument = self.midi.midiInstrumentCode("acoustic grand piano")
         self.assertEqual(0, midi_instrument)
     
-    def test_midiInstrument_valid2(self):
-        midi_instrument = self.midi.midiInstrument("gunshot")
+    def test_midiInstrumentCode_valid2(self):
+        midi_instrument = self.midi.midiInstrumentCode("gunshot")
         self.assertEqual(127, midi_instrument)
     
-    def test_midiInstrument_invalid_instrument(self):
-        midi_instrument = self.midi.midiInstrument("violão")
+    def test_midiInstrumentCode_invalid_instrument(self):
+        midi_instrument = self.midi.midiInstrumentCode("violão")
         self.assertEqual(None, midi_instrument)
     
-    def test_midiInstrument_invalid_type(self):
-        midi_instrument = self.midi.midiInstrument(10)
+    def test_midiInstrumentCode_invalid_type(self):
+        midi_instrument = self.midi.midiInstrumentCode(10)
         self.assertEqual(None, midi_instrument)
 
     def test_midiChannels_valid1(self):
-        midi_channels = self.midi.midiChannels(self.music_sample)
+        midi_channels = self.midi.midiChannels()
         self.assertEqual(1, midi_channels)
     
     def test_midiChannels_valid2(self):
-        midi_channels = self.midi.midiChannels(self.music_sample2)
+        self.midi.setMusic(self.music_sample2)
+        midi_channels = self.midi.midiChannels()
         self.assertEqual(4, midi_channels)
 
+    #criar teste midichannels com musicas invalidas
 
+    
 if __name__ == "__main__":
      unittest.main()

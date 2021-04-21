@@ -2,8 +2,8 @@
 
 class Music:
 
-    def __init__(self, notes=None, volume=None, bpm=None, name=None):
-        self.__notes = notes
+    def __init__(self, sounds=None, volume=None, bpm=None, name=None):
+        self.__sounds = sounds
         self.__volume = volume
         self.__bpm = bpm
         self.__name = name
@@ -27,11 +27,11 @@ class Music:
     def getName(self):
         return self.__name
     
-    def setNotes(self, notes):
-        self.__notes = notes
+    def setSounds(self, sounds):
+        self.__sounds = sounds
     
-    def getNotes(self):
-        return self.__notes
+    def getSounds(self):
+        return self.__sounds
 
 
 class Recorder:
@@ -57,9 +57,8 @@ class MIDI:
     def getMusic(self):
         return self.__music
     
-    def midiNote(self, note, octave):
-    
-        notes_dictionary = {
+    def getMidiNotes(self):
+        midi_notes = {  
             "C":0,
             "C#":1,
             "D":2,
@@ -73,33 +72,11 @@ class MIDI:
             "A#":10,
             "B":11
         }
-        midicode = 0
-
-        try:
-            midicode = notes_dictionary[note] + (octave * 12)
-
-            if(not(midicode >= 0 and midicode <= 127)):
-                raise ValueError
         
-        except KeyError:
-            midicode = None
-            print(f"The note '{note}' is invalid!")
-        
-        except ValueError:
-            midicode = None
-            print(f"'{note}' doesn't have a '{octave}' octave!")
-        
-        except TypeError:
-            midicode = None
-            print("You put an invalid type argument!")
-
-        finally:
-            return midicode
-
-
-    def midiInstrument(self, instrument):
-        
-        midi_instruments_dictionary = { 
+        return midi_notes
+    
+    def getMidiInstruments(self):
+        midi_instruments = { 
             "acoustic grand piano":0, 
             "bright acoustic piano":1, 
             "electric grand piano":2, 
@@ -230,6 +207,37 @@ class MIDI:
             "gunshot":127 
         } 
 
+        return midi_instruments
+    
+    def midiNoteCode(self, note, octave): #Private
+        midi_note_code = 0
+        notes_dictionary = self.getMidiNotes()
+
+        try:
+            midi_note_code = notes_dictionary[note] + (octave * 12)
+
+            if(not(midi_note_code >= 0 and midi_note_code <= 127)):
+                raise ValueError
+        
+        except KeyError:
+            midi_note_code = None
+            print(f"The note '{note}' is invalid!")
+        
+        except ValueError:
+            midi_note_code = None
+            print(f"'{note}' doesn't have a '{octave}' octave!")
+        
+        except TypeError:
+            midi_note_code = None
+            print("You put an invalid type argument!")
+
+        finally:
+            return midi_note_code
+
+    def midiInstrumentCode(self, instrument): #Private
+        
+        midi_instruments_dictionary = self.getMidiInstruments()
+
         try:
             midi_instrument = midi_instruments_dictionary[instrument]
         
@@ -240,11 +248,27 @@ class MIDI:
         finally:
             return midi_instrument
 
-    def midiChannels(self, music):
+    def midiChannels(self): #Private
         channels = 0
-        sound_list = music.getNotes()
+        instrument = 2
+        music_instruments_list = []
 
-        '''for sound in sound_list:
-            for instrument in '''
+        try:
+            sound_list = self.__music.getSounds()
+            midi_instruments = self.getMidiInstruments()
 
-        return 1
+            for sound in sound_list:
+                if(sound[instrument] in midi_instruments):
+                    if(not sound[instrument] in music_instruments_list):
+                        music_instruments_list.append(sound[instrument])
+                        channels += 1
+                else:
+                    raise TypeError
+        
+        except (TypeError, IndexError):
+            channels = None
+            print("You don't have a valid Music in your MIDI object!")
+        
+        finally:
+            return channels
+
