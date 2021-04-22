@@ -1,4 +1,4 @@
-#from midiutil import MIDIFile
+from midiutil import MIDIFile
 
 class Music:
 
@@ -48,8 +48,9 @@ class Recorder:
 
 class MIDI:
 
-    def __init__(self, music=None):
+    def __init__(self, music=Music()):
         self.__music = music
+        self.__midi_config = None
     
     def setMusic(self, music):
         self.__music = music
@@ -209,11 +210,12 @@ class MIDI:
 
         return midi_instruments
     
-    def midiNoteCode(self, note, octave): #Private
+    def __noteCode(self, note, octave):
         midi_note_code = 0
-        notes_dictionary = self.getMidiNotes()
-
+        
         try:
+            notes_dictionary = self.getMidiNotes()
+
             midi_note_code = notes_dictionary[note] + (octave * 12)
 
             if(not(midi_note_code >= 0 and midi_note_code <= 127)):
@@ -234,41 +236,98 @@ class MIDI:
         finally:
             return midi_note_code
 
-    def midiInstrumentCode(self, instrument): #Private
+    def __instrumentCode(self, instrument): 
         
-        midi_instruments_dictionary = self.getMidiInstruments()
-
         try:
+            midi_instruments_dictionary = self.getMidiInstruments()
+            instrument = instrument.lower()
+
             midi_instrument = midi_instruments_dictionary[instrument]
         
-        except KeyError:
+        except (KeyError, AttributeError):
             midi_instrument = None
             print(f"General MIDI doesn't have the '{instrument}' instrument!")
         
         finally:
             return midi_instrument
 
-    def midiChannels(self): #Private
-        channels = 0
+    def __tracks(self): 
         instrument = 2
-        music_instruments_list = []
+        index = 0
+        tracks = {}
 
         try:
             sound_list = self.__music.getSounds()
             midi_instruments = self.getMidiInstruments()
 
             for sound in sound_list:
-                if(sound[instrument] in midi_instruments):
-                    if(not sound[instrument] in music_instruments_list):
-                        music_instruments_list.append(sound[instrument])
-                        channels += 1
+                if(sound[instrument] in midi_instruments): #Check if the instrument is a valid MIDI instrument
+                    if(not sound[instrument] in tracks): #Add each instrument only once
+                        tracks[sound[instrument]] = index
+                        index += 1
                 else:
                     raise TypeError
         
         except (TypeError, IndexError):
-            channels = None
+            tracks = None
             print("You don't have a valid Music in your MIDI object!")
         
         finally:
-            return channels
+            return tracks
+
+    def __beat(self):
+        return 60 / self.__music.getBPM()
+
+    def __configMidiFile(self):
+        
+        tracks = None
+        channel = 0
+        note = 0
+        time = 0
+        duration = 0
+        volume = 0
+
+        i_note = 0
+        i_octave = 1
+        i_instrument = 2
+        silence = '-'
+
+        try:
+            tracks = self.__tracks()
+            num_tracks = len(tracks)
+            duration = self.__beat() #Change later to extend the notes sound
+            volume = self.__music.getVolume()
+
+            midi_config = MIDIFile(num_tracks)
+
+            for sound in self.__music.getSounds():
+                note = self.__noteCode(sound[i_note], sound[i_octave])
+                instrument = self.__instrumentCode(sound[i_instrument])
+                track = tracks[sound[i_instrument]]
+
+                if(sound[i_note] != silence):
+                    midi_config.addNote(track, channel, note, time, duration, volume)
+                    midi_config.addProgramChange(track, channel, time, instrument)
+
+                time += duration
+        
+        except:
+            midi_config = None
+            print("You don't have a valid Music in your MIDI object!")
+
+        finally:
+            self.__midi_config = midi_config
+
+    def __saveMidiFile(self):
+        file_name = self.__music.getName() + ".mid" #Create a self.path in Music class to save the file wherever you want
+        midi_config = self.__midi_config
+
+        try:
+            with open(file_name, "wb") as binfile:
+                midi_config.writeFile(binfile)
+        
+        except:
+            print("Invalid MIDI Config!")
+        
+        
 
