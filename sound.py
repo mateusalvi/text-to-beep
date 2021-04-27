@@ -36,14 +36,13 @@ class Music:
 
 class Recorder:
 
-    def __init__(self, music=None): 
-        self.midi = MIDI(music)
+    def __init__(self): 
+        self.__midi = MIDI()
     
-    def setMusic(self, music):
-        self.midi.setMusic(music)
-    
-    def recordMusic(self):
-        pass
+    def recordMusic(self, music):
+        self.__midi.setMusic(music)
+        self.__midi.configMidiFile()
+        self.__midi.saveMidiFile()
 
 
 class MIDI:
@@ -268,7 +267,7 @@ class MIDI:
                 else:
                     raise TypeError
         
-        except (TypeError, IndexError):
+        except:
             tracks = None
             print("You don't have a valid Music in your MIDI object!")
         
@@ -278,18 +277,13 @@ class MIDI:
     def __beat(self):
         return 60 / self.__music.getBPM()
 
-    def __configMidiFile(self):
+    def configMidiFile(self):
         
-        tracks = None
-        channel = 0
-        note = 0
-        time = 0
-        duration = 0
-        volume = 0
-
         i_note = 0
         i_octave = 1
         i_instrument = 2
+        channel = 0
+        time = 0
         silence = '-'
 
         try:
@@ -318,8 +312,8 @@ class MIDI:
         finally:
             self.__midi_config = midi_config
 
-    def __saveMidiFile(self):
-        file_name = self.__music.getName() + ".mid" #Create a self.path in Music class to save the file wherever you want
+    def saveMidiFile(self):
+        file_name = self.__music.getName() + ".mid" #Create a self.path in Records class to save the file wherever you want
         midi_config = self.__midi_config
 
         try:

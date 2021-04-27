@@ -3,5 +3,7 @@ __pycache__/interface.cpython-37.pyc
 __pycache__/sound_test.cpython-39.pyc
 __pycache__/sound.cpython-39.pyc
 .vscode/
-Song of Healing.mid
-Sample File.mid
+MIDI_SoH.mid
+MIDI_Sample_File.mid
+Recorder_SoH.mid
+Recorder_Sample_File.mid

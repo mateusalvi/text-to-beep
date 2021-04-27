@@ -40,63 +40,65 @@ class MusicTest(unittest.TestCase):
 
 
 class MIDITest(unittest.TestCase):
-    song_of_healing =[ ('-',0,"ocarina"), 
-					('-',0,"ocarina"), 
-					('B',5,"ocarina"), 
-					('-',0,"ocarina"), 
-					('G',5,"ocarina"), 
-					('-',0,"ocarina"),
-					('D',5,"ocarina"),
-					('-',0,"ocarina"),
-					('-',0,"ocarina"), 
-					('-',0,"ocarina"), 
-					('B',5,"ocarina"), 
-					('-',0,"ocarina"), 
-					('G',5,"ocarina"), 
-					('-',0,"ocarina"),
-					('D',5,"ocarina"),
-					('-',0,"ocarina"),
-					('-',0,"ocarina"),
-					('-',0,"ocarina"),
-					('B',5,"ocarina"), 
-					('-',0,"ocarina"), 
-					('G',5,"ocarina"), 
-					('-',0,"ocarina"),
-					('D',5,"ocarina"),
-					('C',5,"ocarina"),
-					('D',5,"ocarina"),
-					('-',0,"ocarina"), 
-					('-',0,"ocarina"),
-					('-',0,"ocarina"), 
-					('B',5,"ocarina"), 
-					('-',0,"ocarina"), 
-					('G',5,"ocarina"), 
-					('-',0,"ocarina"),
-					('D',5,"ocarina"),
-					('-',0,"ocarina"),
-					('-',0,"ocarina"), 
-					('-',0,"ocarina"), 
-					('B',5,"ocarina"), 
-					('-',0,"ocarina"), 
-					('G',5,"ocarina"), 
-					('-',0,"ocarina"),
-					('D',5,"ocarina"),
-					('-',0,"ocarina"),
-					('-',0,"ocarina"),
-					('-',0,"ocarina"),
-					('B',5,"ocarina"), 
-					('-',0,"ocarina"), 
-					('G',5,"ocarina"), 
-					('-',0,"ocarina"),
-					('D',5,"ocarina"),
-					('C',5,"ocarina"),
-					('D',5,"ocarina")]
+    song_of_healing =[  ('-',0,"ocarina"), 
+                        ('-',0,"ocarina"), 
+                        ('B',5,"ocarina"), 
+                        ('-',0,"ocarina"), 
+                        ('G',5,"ocarina"), 
+                        ('-',0,"ocarina"),
+                        ('D',5,"ocarina"),
+                        ('-',0,"ocarina"),
+                        ('-',0,"ocarina"), 
+                        ('-',0,"ocarina"), 
+                        ('B',5,"ocarina"), 
+                        ('-',0,"ocarina"), 
+                        ('G',5,"ocarina"), 
+                        ('-',0,"ocarina"),
+                        ('D',5,"ocarina"),
+                        ('-',0,"ocarina"),
+                        ('-',0,"ocarina"),
+                        ('-',0,"ocarina"),
+                        ('B',5,"ocarina"), 
+                        ('-',0,"ocarina"), 
+                        ('G',5,"ocarina"), 
+                        ('-',0,"ocarina"),
+                        ('D',5,"ocarina"),
+                        ('C',5,"ocarina"),
+                        ('D',5,"ocarina"),
+                        ('-',0,"ocarina"), 
+                        ('-',0,"ocarina"),
+                        ('-',0,"ocarina"), 
+                        ('B',5,"ocarina"), 
+                        ('-',0,"ocarina"), 
+                        ('G',5,"ocarina"), 
+                        ('-',0,"ocarina"),
+                        ('D',5,"ocarina"),
+                        ('-',0,"ocarina"),
+                        ('-',0,"ocarina"), 
+                        ('-',0,"ocarina"), 
+                        ('B',5,"ocarina"), 
+                        ('-',0,"ocarina"), 
+                        ('G',5,"ocarina"), 
+                        ('-',0,"ocarina"),
+                        ('D',5,"ocarina"),
+                        ('-',0,"ocarina"),
+                        ('-',0,"ocarina"),
+                        ('-',0,"ocarina"),
+                        ('B',5,"ocarina"), 
+                        ('-',0,"ocarina"), 
+                        ('G',5,"ocarina"), 
+                        ('-',0,"ocarina"),
+                        ('D',5,"ocarina"),
+                        ('C',5,"ocarina"),
+                        ('D',5,"ocarina")]
     test_sounds = [ ('-',0,"ocarina"),
                     ('C',1,"acoustic grand piano"),
                     ('E',2,"harpsichord"),
                     ('G',3,"violin")]
-    music_sample = Music(song_of_healing, 100, 100, "Song of Healing")
+    
+    music_sample = Music(song_of_healing, 100, 100, "MIDI_SoH")
     music_sample2 = Music(test_sounds, 60, 60, "Music sample2")
+    
     music_sample_invalid1 = Music([('A', 'ocarina')], 100, 100, "Music sample invalid 1")
     music_sample_invalid2 = Music([('A', 5, 8, 'ocarina')], 100, 100, "Music sample invalid 2")
 
@@ -110,12 +112,6 @@ class MIDITest(unittest.TestCase):
     def test_noteCode_valid2(self):
         midi_note = self.midi._MIDI__noteCode('G', 10)
         self.assertEqual(127, midi_note)
-
-    '''
-    def test_noteCode_invalid(self):
-        with self.assertRaises(ValueError):
-            self.midi.__noteCode("G#", 10)
-    '''
 
     def test_noteCode_invalid_octave(self):
         midi_note = self.midi._MIDI__noteCode('G#', 10)
@@ -174,31 +170,172 @@ class MIDITest(unittest.TestCase):
 
     def test_beat(self):
         beat = self.midi._MIDI__beat()
-        self.assertEqual(0.6, beat)
+        self.assertEqual(60 / self.music_sample.getBPM(), beat)
     
     def test_configMidiFile_valid(self):
-        self.midi._MIDI__configMidiFile()
+        self.midi.configMidiFile()
         self.assertEqual(type(MIDIFile()), type(self.midi._MIDI__midi_config))
     
     def test_configMidiFile_invalid1(self):
         self.midi.setMusic(self.music_sample_invalid1)
-        self.midi._MIDI__configMidiFile()
+        self.midi.configMidiFile()
         self.assertEqual(None, self.midi._MIDI__midi_config)
     
     def test_configMidiFile_invalid2(self):
         self.midi.setMusic(self.music_sample_invalid2)
-        self.midi._MIDI__configMidiFile()
+        self.midi.configMidiFile()
         self.assertEqual(None, self.midi._MIDI__midi_config)
     
     def test_saveMidiFile(self):
-        self.midi._MIDI__configMidiFile()
-        self.midi._MIDI__saveMidiFile()
+        self.midi.configMidiFile()
+        self.midi.saveMidiFile()
         midi_file = open(self.music_sample.getName() + ".mid", "rb")
-        sample_file = open("Sample File.mid", "rb")
-        self.assertEqual(type(sample_file), type(midi_file))
 
+        sample_file = MIDIFile()
+        with open("MIDI_Sample_File.mid", "wb") as binfile:
+            sample_file.writeFile(binfile)
+        midi_file2 = open("MIDI_Sample_File.mid", "rb")
 
+        self.assertEqual(type(midi_file2), type(midi_file))
+
+        midi_file.close()
+        midi_file2.close()
+    
    
+class RecorderTest(unittest.TestCase):
+    song_of_healing =[  ('-',0,"ocarina"), 
+                        ('-',0,"ocarina"), 
+                        ('B',5,"ocarina"), 
+                        ('-',0,"ocarina"), 
+                        ('G',5,"ocarina"), 
+                        ('-',0,"ocarina"),
+                        ('D',5,"ocarina"),
+                        ('-',0,"ocarina"),
+                        ('-',0,"ocarina"), 
+                        ('-',0,"ocarina"), 
+                        ('B',5,"ocarina"), 
+                        ('-',0,"ocarina"), 
+                        ('G',5,"ocarina"), 
+                        ('-',0,"ocarina"),
+                        ('D',5,"ocarina"),
+                        ('-',0,"ocarina"),
+                        ('-',0,"ocarina"),
+                        ('-',0,"ocarina"),
+                        ('B',5,"ocarina"), 
+                        ('-',0,"ocarina"), 
+                        ('G',5,"ocarina"), 
+                        ('-',0,"ocarina"),
+                        ('D',5,"ocarina"),
+                        ('C',5,"ocarina"),
+                        ('D',5,"ocarina"),
+                        ('-',0,"ocarina"), 
+                        ('-',0,"ocarina"),
+                        ('-',0,"ocarina"), 
+                        ('B',5,"ocarina"), 
+                        ('-',0,"ocarina"), 
+                        ('G',5,"ocarina"), 
+                        ('-',0,"ocarina"),
+                        ('D',5,"ocarina"),
+                        ('-',0,"ocarina"),
+                        ('-',0,"ocarina"), 
+                        ('-',0,"ocarina"), 
+                        ('B',5,"ocarina"), 
+                        ('-',0,"ocarina"), 
+                        ('G',5,"ocarina"), 
+                        ('-',0,"ocarina"),
+                        ('D',5,"ocarina"),
+                        ('-',0,"ocarina"),
+                        ('-',0,"ocarina"),
+                        ('-',0,"ocarina"),
+                        ('B',5,"ocarina"), 
+                        ('-',0,"ocarina"), 
+                        ('G',5,"ocarina"), 
+                        ('-',0,"ocarina"),
+                        ('D',5,"ocarina"),
+                        ('C',5,"ocarina"),
+                        ('D',5,"ocarina")]
+    music_sample = Music(song_of_healing, 100, 100, "Recorder_SoH")
+
+    def setUp(self):
+        self.recorder = Recorder()
+    
+    def test_recordMusic(self):
+        self.recorder.recordMusic(self.music_sample)
+        midi = MIDI()
+        music_sample2 = Music(self.song_of_healing, self.music_sample.getVolume(), self.music_sample.getBPM(), "Recorder_Sample_File")
+        midi.setMusic(music_sample2)
+        midi.configMidiFile()
+        midi.saveMidiFile()
+        soh = open(self.music_sample.getName() + ".mid", "rb")
+        soh2 = open(music_sample2.getName() + ".mid", "rb")
+
+        self.assertEqual(type(soh), type(soh2))
+
+        soh.close()
+        soh2.close()
+
+    
+
+
+
 if __name__ == "__main__":
      unittest.main()
 
+
+'''
+song_of_healing =[  ('-',0,"ocarina"), 
+                    ('-',0,"ocarina"), 
+                    ('B',5,"ocarina"), 
+                    ('-',0,"ocarina"), 
+                    ('G',5,"ocarina"), 
+                    ('-',0,"ocarina"),
+                    ('D',5,"ocarina"),
+                    ('-',0,"ocarina"),
+                    ('-',0,"ocarina"), 
+                    ('-',0,"ocarina"), 
+                    ('B',5,"ocarina"), 
+                    ('-',0,"ocarina"), 
+                    ('G',5,"ocarina"), 
+                    ('-',0,"ocarina"),
+                    ('D',5,"ocarina"),
+                    ('-',0,"ocarina"),
+                    ('-',0,"ocarina"),
+                    ('-',0,"ocarina"),
+                    ('B',5,"ocarina"), 
+                    ('-',0,"ocarina"), 
+                    ('G',5,"ocarina"), 
+                    ('-',0,"ocarina"),
+                    ('D',5,"ocarina"),
+                    ('C',5,"ocarina"),
+                    ('D',5,"ocarina"),
+                    ('-',0,"ocarina"), 
+                    ('-',0,"ocarina"),
+                    ('-',0,"ocarina"), 
+                    ('B',5,"ocarina"), 
+                    ('-',0,"ocarina"), 
+                    ('G',5,"ocarina"), 
+                    ('-',0,"ocarina"),
+                    ('D',5,"ocarina"),
+                    ('-',0,"ocarina"),
+                    ('-',0,"ocarina"), 
+                    ('-',0,"ocarina"), 
+                    ('B',5,"ocarina"), 
+                    ('-',0,"ocarina"), 
+                    ('G',5,"ocarina"), 
+                    ('-',0,"ocarina"),
+                    ('D',5,"ocarina"),
+                    ('-',0,"ocarina"),
+                    ('-',0,"ocarina"),
+                    ('-',0,"ocarina"),
+                    ('B',5,"ocarina"), 
+                    ('-',0,"ocarina"), 
+                    ('G',5,"ocarina"), 
+                    ('-',0,"ocarina"),
+                    ('D',5,"ocarina"),
+                    ('C',5,"ocarina"),
+                    ('D',5,"ocarina")]
+tururu = Music(song_of_healing, 100, 120, "Tururu")
+
+recorder = Recorder()
+recorder.recordMusic(tururu)
+'''
