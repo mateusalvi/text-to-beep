@@ -39,10 +39,10 @@ class Recorder:
     def __init__(self): 
         self.__midi = MIDI()
     
-    def recordMusic(self, music):
+    def recordMusic(self, music, path):
         self.__midi.setMusic(music)
         self.__midi.configMidiFile()
-        self.__midi.saveMidiFile()
+        self.__midi.saveMidiFile(path)
 
 
 class MIDI:
@@ -320,12 +320,12 @@ class MIDI:
     def __isSilence(self, note):
         return note == '-'
 
-    def saveMidiFile(self):
+    def saveMidiFile(self, path=None):
         file_name = self.__music.getName() + ".mid" #Create a self.path in Records class to save the file wherever you want
         midi_config = self.__midi_config
 
         try:
-            with open(file_name, "wb") as binfile:
+            with open(path + file_name, "wb") as binfile:
                 midi_config.writeFile(binfile)
         
         except:

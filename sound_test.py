@@ -188,7 +188,7 @@ class MIDITest(unittest.TestCase):
     
     def test_saveMidiFile(self):
         self.midi.configMidiFile()
-        self.midi.saveMidiFile()
+        self.midi.saveMidiFile(None)
         midi_file = open(self.music_sample.getName() + ".mid", "rb")
 
         sample_file = MIDIFile()
@@ -260,12 +260,13 @@ class RecorderTest(unittest.TestCase):
         self.recorder = Recorder()
     
     def test_recordMusic(self):
-        self.recorder.recordMusic(self.music_sample)
+        path = None
+        self.recorder.recordMusic(self.music_sample, path)
         midi = MIDI()
         music_sample2 = Music(self.song_of_healing, self.music_sample.getVolume(), self.music_sample.getBPM(), "Recorder_Sample_File")
         midi.setMusic(music_sample2)
         midi.configMidiFile()
-        midi.saveMidiFile()
+        midi.saveMidiFile(path)
         soh = open(self.music_sample.getName() + ".mid", "rb")
         soh2 = open(music_sample2.getName() + ".mid", "rb")
 
@@ -335,11 +336,12 @@ song_of_healing =[  ('-',0,"ocarina"),
                     ('C',5,"ocarina"),
                     ('D',5,"ocarina")]
 tururu = Music(song_of_healing, 100, 120, "Tururu")
+path = "D:\\Arthur\\Área de Trabalho\\"
 
 recorder = Recorder()
-recorder.recordMusic(tururu)
+recorder.recordMusic(tururu, path)
 '''
 
-#Implementar opção de escolher pasta onde será salva a música
+
 #Checar se os requisitos estão sendo atendidos. Mudança de volume, de instrumento e de oitava.
 #Talvez seja necessário remover encapsulamento de alguns métodos
