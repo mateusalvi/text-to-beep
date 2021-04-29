@@ -209,9 +209,7 @@ class MIDI:
 
         return midi_instruments
     
-    def __noteCode(self, note, octave):
-        midi_note_code = 0
-        
+    def noteCode(self, note, octave):        
         try:
             notes_dictionary = self.getMidiNotes()
             midi_note_code = notes_dictionary[note] + (octave * 12)
@@ -234,10 +232,36 @@ class MIDI:
         finally:
             return midi_note_code
     
-    def __isValidMIDINote(self, note):
-        return (note >= 0 and note <= 127)
+    def __isValidMIDINote(self, note_code):
+        if(type(note_code) == int):
+            return (note_code >= 0 and note_code <= 127)
+        else:
+            return False
+    
+    def isValidNote(self, note):
+        if(type(note) == str):
+            return note in self.getMidiNotes()
+        else:
+            return False
 
-    def __instrumentCode(self, instrument): 
+    def isValidOctave(self, note, octave):
+        note_code = self.noteCode(note, octave)
+        if(type(note_code) == int):
+            return self.__isValidMIDINote(note_code)
+        else:
+            return False
+    
+    def isValidInstrument(self, instrument):
+        if(type(instrument) == str):
+            return self.__isValidMIDIInstrument(instrument)
+
+        elif(type(instrument) == int):
+            return (instrument >= 0 and instrument <= 127)
+        
+        else:
+            return False
+
+    def instrumentCode(self, instrument): 
         
         try:
             midi_instruments_dictionary = self.getMidiInstruments()
@@ -278,13 +302,15 @@ class MIDI:
             return tracks
     
     def __isValidMIDIInstrument(self, instrument):
-        return instrument in self.getMidiInstruments()
+        if(type(instrument) == str):
+            return instrument in self.getMidiInstruments()
+        else:
+            return False
 
     def __beat(self):
         return 60 / self.__music.getBPM()
 
     def configMidiFile(self):
-        
         i_note = 0
         i_octave = 1
         i_instrument = 2
@@ -294,19 +320,18 @@ class MIDI:
         try:
             tracks = self.__tracks()
             num_tracks = len(tracks)
+            midi_config = MIDIFile(num_tracks)
+
             duration = self.__beat() #Change later to extend the notes sound
             volume = self.__music.getVolume()
 
-            midi_config = MIDIFile(num_tracks)
-
             for sound in self.__music.getSounds():
                 if(not self.__isSilence(sound[i_note])):
-                    note = self.__noteCode(sound[i_note], sound[i_octave])
-                    instrument = self.__instrumentCode(sound[i_instrument])
+                    note = self.noteCode(sound[i_note], sound[i_octave])
+                    instrument = self.instrumentCode(sound[i_instrument])
                     track = tracks[sound[i_instrument]]
 
-                    midi_config.addNote(track, channel, note, time, duration, volume)
-                    midi_config.addProgramChange(track, channel, time, instrument)
+                    midi_config = self.__addSound(midi_config, track, channel, note, time, duration, volume, instrument)
 
                 time += duration
         
@@ -319,8 +344,13 @@ class MIDI:
     
     def __isSilence(self, note):
         return note == '-'
+    
+    def __addSound(self, midi_file, track, channel, note, time, duration, volume, instrument):
+        midi_file.addNote(track, channel, note, time, duration, volume)
+        midi_file.addProgramChange(track, channel, time, instrument)
+        return midi_file
 
-    def saveMidiFile(self, path=None):
+    def saveMidiFile(self, path):
         file_name = self.__music.getName() + ".mid" #Create a self.path in Records class to save the file wherever you want
         midi_config = self.__midi_config
 
@@ -330,6 +360,5 @@ class MIDI:
         
         except:
             print("Invalid MIDI Config!")
-        
         
 

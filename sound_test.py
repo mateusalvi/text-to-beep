@@ -106,47 +106,47 @@ class MIDITest(unittest.TestCase):
         self.midi = MIDI(self.music_sample)
     
     def test_noteCode_valid1(self):
-        midi_note = self.midi._MIDI__noteCode('C', 0)
+        midi_note = self.midi.noteCode('C', 0)
         self.assertEqual(0, midi_note)
 
     def test_noteCode_valid2(self):
-        midi_note = self.midi._MIDI__noteCode('G', 10)
+        midi_note = self.midi.noteCode('G', 10)
         self.assertEqual(127, midi_note)
 
     def test_noteCode_invalid_octave(self):
-        midi_note = self.midi._MIDI__noteCode('G#', 10)
+        midi_note = self.midi.noteCode('G#', 10)
         self.assertEqual(None, midi_note)
     
     def test_noteCode_invalid_note(self):
-        midi_note = self.midi._MIDI__noteCode('K', 5)
+        midi_note = self.midi.noteCode('K', 5)
         self.assertEqual(None, midi_note)
     
     def test_noteCode_invalid_type1(self):
-        midi_note = self.midi._MIDI__noteCode(5, 5)
+        midi_note = self.midi.noteCode(5, 5)
         self.assertEqual(None, midi_note)
     
     def test_noteCode_invalid_type2(self):
-        midi_note = self.midi._MIDI__noteCode('C', 'G')
+        midi_note = self.midi.noteCode('C', 'G')
         self.assertEqual(None, midi_note)
     
     def test_instrumentCode_valid1(self):
-        midi_instrument = self.midi._MIDI__instrumentCode("acoustic grand piano")
+        midi_instrument = self.midi.instrumentCode("acoustic grand piano")
         self.assertEqual(0, midi_instrument)
     
     def test_instrumentCode_valid2(self):
-        midi_instrument = self.midi._MIDI__instrumentCode("gunshot")
+        midi_instrument = self.midi.instrumentCode("gunshot")
         self.assertEqual(127, midi_instrument)
     
     def test_instrumentCode_valid_uppercase(self):
-        midi_instrument = self.midi._MIDI__instrumentCode("PICCOLO")
+        midi_instrument = self.midi.instrumentCode("PICCOLO")
         self.assertEqual(72, midi_instrument)
     
     def test_instrumentCode_invalid_instrument(self):
-        midi_instrument = self.midi._MIDI__instrumentCode("violão")
+        midi_instrument = self.midi.instrumentCode("violão")
         self.assertEqual(None, midi_instrument)
     
     def test_instrumentCode_invalid_type(self):
-        midi_instrument = self.midi._MIDI__instrumentCode(10)
+        midi_instrument = self.midi.instrumentCode(10)
         self.assertEqual(None, midi_instrument)
 
     def test_tracks_valid1(self):
@@ -187,8 +187,9 @@ class MIDITest(unittest.TestCase):
         self.assertEqual(None, self.midi._MIDI__midi_config)
     
     def test_saveMidiFile(self):
+        path = "/"
         self.midi.configMidiFile()
-        self.midi.saveMidiFile(None)
+        self.midi.saveMidiFile(path)
         midi_file = open(self.music_sample.getName() + ".mid", "rb")
 
         sample_file = MIDIFile()
@@ -200,7 +201,34 @@ class MIDITest(unittest.TestCase):
 
         midi_file.close()
         midi_file2.close()
+
+    def test_isValidNote_valid(self):
+        self.assertTrue(self.midi.isValidNote("A"))
+
+    def test_isValidNote_invalid(self):
+        self.assertFalse(self.midi.isValidNote("H"))
+
+    def test_isValidOctave_valid(self):
+        self.assertTrue(self.midi.isValidOctave("C", 5))
     
+    def test_isValidOctave_invalid(self):
+        self.assertFalse(self.midi.isValidOctave("A", 10))
+    
+    def test_isValidInstrument_valid1(self):
+        self.assertTrue(self.midi.isValidInstrument("ocarina"))
+    
+    def test_isValidInstrument_valid2(self):
+        self.assertTrue(self.midi.isValidInstrument(0))
+    
+    def test_isValidInstrument_invalid1(self):
+        self.assertFalse(self.midi.isValidInstrument("violão"))
+    
+    def test_isValidInstrument_invalid2(self):
+        self.assertFalse(self.midi.isValidInstrument(200))
+    
+    
+
+
    
 class RecorderTest(unittest.TestCase):
     song_of_healing =[  ('-',0,"ocarina"), 
@@ -260,7 +288,7 @@ class RecorderTest(unittest.TestCase):
         self.recorder = Recorder()
     
     def test_recordMusic(self):
-        path = None
+        path = "/"
         self.recorder.recordMusic(self.music_sample, path)
         midi = MIDI()
         music_sample2 = Music(self.song_of_healing, self.music_sample.getVolume(), self.music_sample.getBPM(), "Recorder_Sample_File")
@@ -281,6 +309,7 @@ class RecorderTest(unittest.TestCase):
 
 if __name__ == "__main__":
      unittest.main()
+
 
 
 '''
@@ -345,3 +374,8 @@ recorder.recordMusic(tururu, path)
 
 #Checar se os requisitos estão sendo atendidos. Mudança de volume, de instrumento e de oitava.
 #Talvez seja necessário remover encapsulamento de alguns métodos
+
+#-Espaço = Dobra o volume, se não volta pro padrão
+
+#Melhorar checargem de tipos dos métodos, buscando remover as exceções.
+#Checar repetição e usos de verificação de nota, oitava e instrumento
