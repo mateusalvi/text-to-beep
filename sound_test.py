@@ -339,3 +339,7 @@ tururu = Music(song_of_healing, 100, 120, "Tururu")
 recorder = Recorder()
 recorder.recordMusic(tururu)
 '''
+
+#Implementar opção de escolher pasta onde será salva a música
+#Checar se os requisitos estão sendo atendidos. Mudança de volume, de instrumento e de oitava.
+#Talvez seja necessário remover encapsulamento de alguns métodos

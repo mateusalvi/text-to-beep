@@ -214,10 +214,9 @@ class MIDI:
         
         try:
             notes_dictionary = self.getMidiNotes()
-
             midi_note_code = notes_dictionary[note] + (octave * 12)
 
-            if(not(midi_note_code >= 0 and midi_note_code <= 127)):
+            if(not self.__isValidMIDINote(midi_note_code)):
                 raise ValueError
         
         except KeyError:
@@ -228,12 +227,15 @@ class MIDI:
             midi_note_code = None
             print(f"'{note}' doesn't have a '{octave}' octave!")
         
-        except TypeError:
+        except:
             midi_note_code = None
             print("You put an invalid type argument!")
 
         finally:
             return midi_note_code
+    
+    def __isValidMIDINote(self, note):
+        return (note >= 0 and note <= 127)
 
     def __instrumentCode(self, instrument): 
         
@@ -243,7 +245,7 @@ class MIDI:
 
             midi_instrument = midi_instruments_dictionary[instrument]
         
-        except (KeyError, AttributeError):
+        except:
             midi_instrument = None
             print(f"General MIDI doesn't have the '{instrument}' instrument!")
         
@@ -251,18 +253,19 @@ class MIDI:
             return midi_instrument
 
     def __tracks(self): 
-        instrument = 2
+        i_instrument = 2
         index = 0
         tracks = {}
 
         try:
             sound_list = self.__music.getSounds()
-            midi_instruments = self.getMidiInstruments()
 
             for sound in sound_list:
-                if(sound[instrument] in midi_instruments): #Check if the instrument is a valid MIDI instrument
-                    if(not sound[instrument] in tracks): #Add each instrument only once
-                        tracks[sound[instrument]] = index
+                instrument = sound[i_instrument]
+
+                if(self.__isValidMIDIInstrument(instrument)):
+                    if(not instrument in tracks):
+                        tracks[instrument] = index
                         index += 1
                 else:
                     raise TypeError
@@ -273,6 +276,9 @@ class MIDI:
         
         finally:
             return tracks
+    
+    def __isValidMIDIInstrument(self, instrument):
+        return instrument in self.getMidiInstruments()
 
     def __beat(self):
         return 60 / self.__music.getBPM()
@@ -284,7 +290,6 @@ class MIDI:
         i_instrument = 2
         channel = 0
         time = 0
-        silence = '-'
 
         try:
             tracks = self.__tracks()
@@ -295,11 +300,11 @@ class MIDI:
             midi_config = MIDIFile(num_tracks)
 
             for sound in self.__music.getSounds():
-                note = self.__noteCode(sound[i_note], sound[i_octave])
-                instrument = self.__instrumentCode(sound[i_instrument])
-                track = tracks[sound[i_instrument]]
+                if(not self.__isSilence(sound[i_note])):
+                    note = self.__noteCode(sound[i_note], sound[i_octave])
+                    instrument = self.__instrumentCode(sound[i_instrument])
+                    track = tracks[sound[i_instrument]]
 
-                if(sound[i_note] != silence):
                     midi_config.addNote(track, channel, note, time, duration, volume)
                     midi_config.addProgramChange(track, channel, time, instrument)
 
@@ -311,6 +316,9 @@ class MIDI:
 
         finally:
             self.__midi_config = midi_config
+    
+    def __isSilence(self, note):
+        return note == '-'
 
     def saveMidiFile(self):
         file_name = self.__music.getName() + ".mid" #Create a self.path in Records class to save the file wherever you want
