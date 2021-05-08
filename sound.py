@@ -324,14 +324,23 @@ class MIDI:
 
             duration = self.__beat() #Change later to extend the notes sound
             volume = self.__music.getVolume()
+            volume_def = volume
 
             for sound in self.__music.getSounds():
                 if(not self.__isSilence(sound[i_note])):
-                    note = self.noteCode(sound[i_note], sound[i_octave])
-                    instrument = self.instrumentCode(sound[i_instrument])
-                    track = tracks[sound[i_instrument]]
+                    if(not self.__isDoubleVolume(sound[i_note])):
 
-                    midi_config = self.__addSound(midi_config, track, channel, note, time, duration, volume, instrument)
+                        note = self.noteCode(sound[i_note], sound[i_octave])
+                        instrument = self.instrumentCode(sound[i_instrument])
+                        track = tracks[sound[i_instrument]]
+
+                        midi_config = self.__addSound(midi_config, track, channel, note, time, duration, volume, instrument)
+                    
+                    else:
+                        volume = volume * 2
+                        if(not self.__isValidVolume(volume)):
+                            volume = volume_def
+                        continue
 
                 time += duration
         
@@ -345,6 +354,12 @@ class MIDI:
     def __isSilence(self, note):
         return note == '-'
     
+    def __isDoubleVolume(self, note):
+        return note == ' '
+    
+    def __isValidVolume(self, volume):
+        return (volume >= 0 and volume <= 127)
+
     def __addSound(self, midi_file, track, channel, note, time, duration, volume, instrument):
         midi_file.addNote(track, channel, note, time, duration, volume)
         midi_file.addProgramChange(track, channel, time, instrument)

@@ -364,18 +364,32 @@ song_of_healing =[  ('-',0,"ocarina"),
                     ('D',5,"ocarina"),
                     ('C',5,"ocarina"),
                     ('D',5,"ocarina")]
-tururu = Music(song_of_healing, 100, 120, "Tururu")
+tururu = Music(song_of_healing, 50, 120, "Tururu")
 path = "D:\\Arthur\\Área de Trabalho\\"
 
 recorder = Recorder()
 recorder.recordMusic(tururu, path)
 '''
+'''
+teste_volume = [("C", 5, "ocarina"),
+                (" ", 5, "ocarina"),
+                ("C", 5, "ocarina"),
+                (" ", 5, "ocarina"),
+                ("C", 5, "ocarina"),
+                (" ", 5, "ocarina"),
+                ("C", 5, "ocarina"),
+                ("C", 5, "ocarina"),
+                ("C", 5, "ocarina")]
 
+tst = Music(teste_volume, 50, 30, "Teste_volume")
+path = "D:\\Arthur\\Área de Trabalho\\"
+
+recorder = Recorder()
+recorder.recordMusic(tst, path)
+'''
 
 #Checar se os requisitos estão sendo atendidos. Mudança de volume, de instrumento e de oitava.
 #Talvez seja necessário remover encapsulamento de alguns métodos
-
-#-Espaço = Dobra o volume, se não volta pro padrão
 
 #Melhorar checargem de tipos dos métodos, buscando remover as exceções.
 #Checar repetição e usos de verificação de nota, oitava e instrumento
