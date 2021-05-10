@@ -37,26 +37,19 @@ class Music:
 class Recorder:
 
     def __init__(self): 
-        self.__midi = MIDI()
+        self.__midi_music = MIDIMusic()
     
     def recordMusic(self, music, path):
-        self.__midi.setMusic(music)
-        self.__midi.configMidiFile()
-        self.__midi.saveMidiFile(path)
+        self.__midi_music.setMusic(music)
+        self.__midi_music.configMidiFile()
+        self.__midi_music.saveMidiFile(path)
 
 
-class MIDI:
+class MIDIInfo:
 
-    def __init__(self, music=Music()):
-        self.__music = music
-        self.__midi_config = None
-    
-    def setMusic(self, music):
-        self.__music = music
-    
-    def getMusic(self):
-        return self.__music
-    
+    def __init__(self):
+        pass
+
     def getMidiNotes(self):
         midi_notes = {  
             "C":0,
@@ -74,7 +67,7 @@ class MIDI:
         }
         
         return midi_notes
-    
+
     def getMidiInstruments(self):
         midi_instruments = { 
             "acoustic grand piano":0, 
@@ -208,7 +201,7 @@ class MIDI:
         } 
 
         return midi_instruments
-    
+
     def noteCode(self, note, octave):        
         try:
             notes_dictionary = self.getMidiNotes()
@@ -237,29 +230,6 @@ class MIDI:
             return (note_code >= 0 and note_code <= 127)
         else:
             return False
-    
-    def isValidNote(self, note):
-        if(type(note) == str):
-            return note in self.getMidiNotes()
-        else:
-            return False
-
-    def isValidOctave(self, note, octave):
-        note_code = self.noteCode(note, octave)
-        if(type(note_code) == int):
-            return self.__isValidMIDINote(note_code)
-        else:
-            return False
-    
-    def isValidInstrument(self, instrument):
-        if(type(instrument) == str):
-            return self.__isValidMIDIInstrument(instrument)
-
-        elif(type(instrument) == int):
-            return (instrument >= 0 and instrument <= 127)
-        
-        else:
-            return False
 
     def instrumentCode(self, instrument): 
         
@@ -276,6 +246,50 @@ class MIDI:
         finally:
             return midi_instrument
 
+    def isValidNote(self, note):
+        if(type(note) == str):
+            return note in self.getMidiNotes()
+        else:
+            return False
+
+    def isValidOctave(self, note, octave):
+        note_code = self.noteCode(note, octave)
+        if(type(note_code) == int):
+            return self.__isValidMIDINote(note_code)
+        else:
+            return False
+    
+    def isValidInstrument(self, instrument):
+        if(type(instrument) == str):
+            instrument = instrument.lower()
+            return self.__isValidMIDIInstrument(instrument)
+
+        elif(type(instrument) == int):
+            return (instrument >= 0 and instrument <= 127)
+        
+        else:
+            return False
+    
+    def __isValidMIDIInstrument(self, instrument):
+        if(type(instrument) == str):
+            return instrument in self.getMidiInstruments()
+        else:
+            return False
+
+
+class MIDIMusic:
+
+    def __init__(self, music=Music()):
+        self.__music = music
+        self.__midi_config = None
+        self.__midi_info = MIDIInfo()
+    
+    def setMusic(self, music):
+        self.__music = music
+    
+    def getMusic(self):
+        return self.__music
+
     def __tracks(self): 
         i_instrument = 2
         index = 0
@@ -287,10 +301,13 @@ class MIDI:
             for sound in sound_list:
                 instrument = sound[i_instrument]
 
-                if(self.__isValidMIDIInstrument(instrument)):
-                    if(not instrument in tracks):
-                        tracks[instrument] = index
-                        index += 1
+                if(type(instrument) == str):
+                    if(self.__midi_info.isValidInstrument(instrument)):
+                        if(not instrument in tracks):
+                            tracks[instrument] = index
+                            index += 1
+                    else:
+                        raise KeyError
                 else:
                     raise TypeError
         
@@ -300,16 +317,10 @@ class MIDI:
         
         finally:
             return tracks
-    
-    def __isValidMIDIInstrument(self, instrument):
-        if(type(instrument) == str):
-            return instrument in self.getMidiInstruments()
-        else:
-            return False
 
     def __beat(self):
         return 60 / self.__music.getBPM()
-
+    
     def configMidiFile(self):
         i_note = 0
         i_octave = 1
@@ -322,7 +333,7 @@ class MIDI:
             num_tracks = len(tracks)
             midi_config = MIDIFile(num_tracks)
 
-            duration = self.__beat() #Change later to extend the notes sound
+            duration = self.__beat()
             volume = self.__music.getVolume()
             volume_def = volume
 
@@ -330,8 +341,8 @@ class MIDI:
                 if(not self.__isSilence(sound[i_note])):
                     if(not self.__isDoubleVolume(sound[i_note])):
 
-                        note = self.noteCode(sound[i_note], sound[i_octave])
-                        instrument = self.instrumentCode(sound[i_instrument])
+                        note = self.__midi_info.noteCode(sound[i_note], sound[i_octave])
+                        instrument = self.__midi_info.instrumentCode(sound[i_instrument])
                         track = tracks[sound[i_instrument]]
 
                         midi_config = self.__addSound(midi_config, track, channel, note, time, duration, volume, instrument)
@@ -359,14 +370,14 @@ class MIDI:
     
     def __isValidVolume(self, volume):
         return (volume >= 0 and volume <= 127)
-
+    
     def __addSound(self, midi_file, track, channel, note, time, duration, volume, instrument):
         midi_file.addNote(track, channel, note, time, duration, volume)
         midi_file.addProgramChange(track, channel, time, instrument)
         return midi_file
-
+    
     def saveMidiFile(self, path):
-        file_name = self.__music.getName() + ".mid" #Create a self.path in Records class to save the file wherever you want
+        file_name = self.__music.getName() + ".mid"
         midi_config = self.__midi_config
 
         try:
@@ -375,5 +386,4 @@ class MIDI:
         
         except:
             print("Invalid MIDI Config!")
-        
 
