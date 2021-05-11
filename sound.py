@@ -204,11 +204,15 @@ class MIDIInfo:
 
     def noteCode(self, note, octave):        
         try:
-            notes_dictionary = self.getMidiNotes()
-            midi_note_code = notes_dictionary[note] + (octave * 12)
+            if((type(note) == str) and (type(octave) == int)):
 
-            if(not self.__isValidMIDINote(midi_note_code)):
-                raise ValueError
+                notes_dictionary = self.getMidiNotes()
+                midi_note_code = notes_dictionary[note] + (octave * 12)
+
+                if(not self.__isValidMIDINote(midi_note_code)):
+                    raise ValueError
+            else:
+                raise TypeError
         
         except KeyError:
             midi_note_code = None
@@ -217,6 +221,10 @@ class MIDIInfo:
         except ValueError:
             midi_note_code = None
             print(f"'{note}' doesn't have a '{octave}' octave!")
+        
+        except TypeError:
+            midi_note_code = None
+            print(f"'{note}' must be a string, and '{octave}' must be an int!")
         
         except:
             midi_note_code = None
@@ -234,17 +242,23 @@ class MIDIInfo:
     def instrumentCode(self, instrument): 
         
         try:
-            midi_instruments_dictionary = self.getMidiInstruments()
-            instrument = instrument.lower()
-
-            midi_instrument = midi_instruments_dictionary[instrument]
+            if(type(instrument) == str):
+                instrument = instrument.lower()    
+                instruments_dictionary = self.getMidiInstruments()
+                midi_instrument_code = instruments_dictionary[instrument]     
+            else:
+                raise TypeError
         
+        except TypeError:
+            midi_instrument_code = None
+            print(f"'{instrument}' must be a string!")
+
         except:
-            midi_instrument = None
+            midi_instrument_code = None
             print(f"General MIDI doesn't have the '{instrument}' instrument!")
         
         finally:
-            return midi_instrument
+            return midi_instrument_code
 
     def isValidNote(self, note):
         if(type(note) == str):
@@ -255,24 +269,28 @@ class MIDIInfo:
     def isValidOctave(self, note, octave):
         note_code = self.noteCode(note, octave)
         if(type(note_code) == int):
-            return self.__isValidMIDINote(note_code)
+            return True
         else:
             return False
     
     def isValidInstrument(self, instrument):
         if(type(instrument) == str):
-            instrument = instrument.lower()
-            return self.__isValidMIDIInstrument(instrument)
-
+            return self.__isValidMIDIInstrument_str(instrument)   
         elif(type(instrument) == int):
-            return (instrument >= 0 and instrument <= 127)
-        
+            return self.__isValidMIDIInstrument_int(instrument)      
         else:
             return False
     
-    def __isValidMIDIInstrument(self, instrument):
+    def __isValidMIDIInstrument_str(self, instrument):
         if(type(instrument) == str):
+            instrument = instrument.lower()
             return instrument in self.getMidiInstruments()
+        else:
+            return False
+    
+    def __isValidMIDIInstrument_int(self, instrument):
+        if(type(instrument) == int):
+            return (instrument >= 0 and instrument <= 127)
         else:
             return False
 
