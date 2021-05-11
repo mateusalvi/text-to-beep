@@ -328,6 +328,14 @@ class MIDIMusic:
                         raise KeyError
                 else:
                     raise TypeError
+
+        except TypeError:
+            tracks = None
+            print("The sound list of your Music don't have valid instruments, they must be strings!")
+        
+        except KeyError:
+            tracks = None
+            print(f"General MIDI doesn't have the '{instrument}' instrument!")
         
         except:
             tracks = None
