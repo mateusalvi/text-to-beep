@@ -10,9 +10,9 @@ class operations:
     #Salva um arquivo com o nome, caminho e conteúdo recebidos
     def saveMidi(MIDIinput, filePathAndName):
         if filePathAndName != " ":
-            arquivo = open(filePathAndName,'w')     #Salva um arquivo .midi, ja recebe a extensão .MIDI da janela de navegação chamada pela interface
-            arquivo.write(MIDIinput)               #Escreve nesse arquivo o texto que está na caixa
-            arquivo.close()
+            __arquivo = open(filePathAndName,'w')     #Salva um arquivo .midi, ja recebe a extensão .MIDI da janela de navegação chamada pela interface
+            __arquivo.write(MIDIinput)               #Escreve nesse arquivo o texto que está na caixa
+            __arquivo.close()
         else:
             print("Debug: Sem caminho especificado para salvar")
 
