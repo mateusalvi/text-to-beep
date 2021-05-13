@@ -1,10 +1,12 @@
 import interface as interface
 
+
 def main():
     window = interface.interface
    
     while True:
         window.update_window(window)#!!Checa e atualiza eventos e entradas na interface!!
+
         
 
         if (window.event == "play_button"):
@@ -19,13 +21,16 @@ def main():
         elif (window.event == "file_selected"): #Ao se escolher um arquivo, passa ele para a caixa de texto
             print('Debug: Carregar arquivo de texto')
             window.openFile(window)
-        
-        elif (window.event == "export_button"):
-            print('Debug: Exportar para MIDI')
+
+        #To com um bug nessa função: o primeiro arquivo não é salvo, apenas do segundo em diante, ta passando um null que eu não to sabendo de onde vem e bugando o primeiro
+        elif (window.event == "file_saved"):
+            print('Debug: Salvando Arquivo')
             input_text = window.returnText(window)
-            #chamar a função exportar(texto)
-    
+            window.save_File(window,input_text)
+
+
         elif (window.event == interface.sg.WIN_CLOSED):#!!Fecha o programa se o usuário fechar a janela!!
+            print(window.event)
             break
         
 
