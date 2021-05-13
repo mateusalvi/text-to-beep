@@ -1,5 +1,5 @@
 import interface as interface
-
+import fileManager as fileManager
 
 def main():
     window = interface.interface
@@ -7,30 +7,37 @@ def main():
     while True:
         window.update_window(window)#!!Checa e atualiza eventos e entradas na interface!!
 
-        
-
+        #Se o botão Tocar música for pressionado:
         if (window.event == "play_button"):
             print('Debug: Tocando a musica')
             input_text = window.returnText(window)
-            #chamar o interpretador(passar texto)
+            #chamar o player( Return do interpretador() )
+            print('Debug: Fim da reprodução')
 
+        #Se o botão Parar música for pressionado:
         elif (window.event == "stop_button"):
-            print('Debug: Parou a música')
             #parar a reprodução
+            print('Debug: Parou a música')
 
-        elif (window.event == "file_selected"): #Ao se escolher um arquivo, passa ele para a caixa de texto
+        #Se o botão Carregar Arquivo for pressionado:
+        elif (window.event == "file_selected"):
             print('Debug: Carregar arquivo de texto')
-            window.openFile(window)
+            textFile = fileManager.operations.openFile(window.values['file_selected'])
+            window.writeFileToTextBox(textFile, window)
+            print('Debug: Arquivo texto carregado')
 
-        #To com um bug nessa função: o primeiro arquivo não é salvo, apenas do segundo em diante, ta passando um null que eu não to sabendo de onde vem e bugando o primeiro
+        #Se o botão Salvar MIDI for pressionado:
         elif (window.event == "file_saved"):
-            print('Debug: Salvando Arquivo')
-            input_text = window.returnText(window)
-            window.save_File(window,input_text)
+            print('Debug: Salvando arquivo MIDI')
+            filePathAndName = window.values['file_saved']
+            MIDIinput = window.returnText(window)#!!!!!!!!! aqui vai o interpretador, no momento só salva oque está escrito na text box
+            fileManager.operations.saveMidi(MIDIinput, filePathAndName)
+            print('Debug: Arquivo MIDI salvo')
 
-
-        elif (window.event == interface.sg.WIN_CLOSED):#!!Fecha o programa se o usuário fechar a janela!!
+        #!!Fecha o programa se o usuário fechar a janela, precisa estar no loop do main!!
+        elif (window.event == interface.sg.WIN_CLOSED):
             print(window.event)
+            print(window.values)
             break
         
 
