@@ -1,4 +1,4 @@
-from sound import Music
+from sound import *
 
 def interpretador(input_text):
     l = input_text
@@ -63,7 +63,20 @@ def interpretador(input_text):
             else:
                 nota = "-"
                 x = x+1
+
+        print("instrumento: " + str(instrumento)) #DEBUG
         lista.append((nota,oitava,instrumento))
-        musica.setSounds(lista)
+
+
+    #AQUI TEM QUE FAZER A CONVERSÃO DO INSTRUMENTO INT PRA STR
+    #terceiro elemento de cada elemento da lista é o instrumento
+    #tem que passar pra string
+
+    #x=0
+    #while x<len(lista):
+        #lista[x][x+3]=funcao que converte int pra string (nome do instrumento)
+
+    print(lista) #DEBUG
+    return lista
 
 
