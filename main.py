@@ -12,8 +12,9 @@ def main():
         if (window.event == "play_button"):
             print('Debug: Tocando a musica')
             input_text = window.returnText(window)
-            interpreter.interpretador(input_text)
+            interpreter.interpretador(input_text)                   #Chama o interpretador passando o texto escrito na caixa
             #chamar o player( Return do interpretador() )
+            window.stop(window)                                     #Ao terminar a reprodução, altera os botões ativos
             print('Debug: Fim da reprodução')
 
         #Se o botão Parar música for pressionado:
