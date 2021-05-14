@@ -3,7 +3,7 @@ from sound import *
 
    
 class RecorderTest(unittest.TestCase):
-    song_of_healing =[  ('-',0,"ocarina"), 
+    song_of_healing =[  ('-',0,"ocarina"), #nota,oitava,instrumento
                         ('-',0,"ocarina"), 
                         ('B',5,"ocarina"), 
                         ('-',0,"ocarina"), 
@@ -54,7 +54,8 @@ class RecorderTest(unittest.TestCase):
                         ('D',5,"ocarina"),
                         ('C',5,"ocarina"),
                         ('D',5,"ocarina")]
-    music_sample = Music(song_of_healing, 100, 100, "Recorder_SoH")
+    music_sample = Music(song_of_healing, 100, 100, "Recorder_SoH")  #som,volume,bpm,
+    #primeiro parametro é sounds que é a lista ali em cima
 
     def setUp(self):
         self.recorder = Recorder()
