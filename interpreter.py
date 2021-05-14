@@ -66,4 +66,22 @@ def interpretador(input_text):
         lista.append((nota,oitava,instrumento))
         musica.setSounds(lista)
 
+'''
+Dá pra pegar o dicionário que contém todos os instrumentos e converter pra uma lista,
+assim o código é o próprio índice dele. Exemplo:
 
+midi_info = MIDIInfo()
+lista_instrumentos = list(midi_info.getMidiInstruments())
+print(lista_instrumentos[6]) #harpsichord
+print(lista_instrumentos[14]) #tubular bells
+'''
+
+
+#Exemplo de texto para usar em testes:
+'''
+ZZBZGZDZZZBZGZDZZZBZGZDCDZZZBZGZDZZZBZGZDZZZBZGZDCDZ
+
+volume = 100
+bpm = 100
+nome = "teste interpretador"
+'''
