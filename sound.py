@@ -32,6 +32,15 @@ class Music:
     
     def getSounds(self):
         return self.__sounds
+    def toString(self):   #tostring pra debugar
+        print("=============================================================================")
+        print("tupla de sons: " + str(self.__sounds))
+        print("ultima elemento da tupla: " + str(self.__sounds[len(self.__sounds) - 1]))
+        print("Volume: " + str(self.__volume))
+        print("bpm: " + str(self.__bpm))
+        print("nome: " + self.__name)
+        print("=============================================================================")
+
 
 
 class Recorder:

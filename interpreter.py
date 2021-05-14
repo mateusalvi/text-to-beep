@@ -1,17 +1,33 @@
 from sound import *
+import os #pra salvar o arquivo temporario na mesma pasta
 
 def interpretador(input_text):
+    midi_info = MIDIInfo()
+    lista_instrumentos = list(midi_info.getMidiInstruments())
     l = input_text
     x=0 #ponteiro da lista
     nota = 'A' #nota inicial
     bpm = 100 #bpm inicial
+    volume = 100
     instrumento = 0 #instrumento inicial
     oitava = 1
     lista = []
     numeros = ['1','2','3','4','5','6','7','8','9','0']
     listaNotas = ['A','B','C','D','E','F','G']
     #tururu = Music(lista, volume, bpm, "Tururu")
-    musica = Music()
+    #musica = Music(lista,volume,100,"TESTE OI")
+
+
+
+    l="ZZBZGZDZZZBZGZDZZZBZGZDCDZZZBZGZDZZZBZGZDZZZBZGZDCDZ"
+
+    volume = 100
+    bpm = 100
+    nome = "teste interpretador"
+
+    musica = Music(l,volume,bpm,nome)
+
+
     while x < len(l):
 
     #===========================================INSTRUMENTOS==============================
@@ -64,20 +80,23 @@ def interpretador(input_text):
                 nota = "-"
                 x = x+1
 
-        print("instrumento: " + str(instrumento)) #DEBUG
-        lista.append((nota,oitava,instrumento))
+        #print("instrumento: " + str(instrumento)) #DEBUG
+        lista.append((nota,oitava,lista_instrumentos[instrumento]))
+    #print(lista)
+    musica.setSounds(lista)
+    return musica
+
+def play(input_text):
+    musica=interpretador(input_text)
+    rec = Recorder()
+    path = os.getcwd() #vai salvar na mesma pasta o qual foi executado
+    rec.recordMusic(musica,path)
+    return
 
 
-    #AQUI TEM QUE FAZER A CONVERSÃO DO INSTRUMENTO INT PRA STR
-    #terceiro elemento de cada elemento da lista é o instrumento
-    #tem que passar pra string
 
-    #x=0
-    #while x<len(lista):
-        #lista[x][x+3]=funcao que converte int pra string (nome do instrumento)
 
-    print(lista) #DEBUG
-    return lista
+
 
 '''
 Dá pra pegar o dicionário que contém todos os instrumentos e converter pra uma lista,

@@ -1,6 +1,6 @@
 import interface as interface
 import fileManager as fileManager
-import interpreter as interpreter
+from interpreter import *
 
 def main():
     window = interface.interface
@@ -12,8 +12,7 @@ def main():
         if (window.event == "play_button"):
             print('Debug: Tocando a musica')
             input_text = window.returnText(window)
-            interpreter.interpretador(input_text)                   #Chama o interpretador passando o texto escrito na caixa
-            #chamar o player( Return do interpretador() )
+            play(input_text)
             window.stop(window)                                     #Ao terminar a reprodução, altera os botões ativos
             print('Debug: Fim da reprodução')
 
