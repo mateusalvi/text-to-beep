@@ -18,10 +18,7 @@ def interpretador(input_text,nome):
     listaNotas = ['A','B','C','D','E','F','G']
     #tururu = Music(lista, volume, bpm, "Tururu")
     #musica = Music(lista,volume,100,"TESTE OI")
-
-
-
-    l="ZZBZGZDZZZBZGZDZZZBZGZDCDZZZBZGZDZZZBZGZDZZZBZGZDCDZ"
+    #l="ZZBZGZDZZZBZGZDZZZBZGZDCDZZZBZGZDZZZBZGZDZZZBZGZDCDZ"
 
     volume = 100
     bpm = 100
@@ -89,9 +86,9 @@ def interpretador(input_text,nome):
     return musica
 
 def play(input_text):
-    musica=interpretador(input_text,"temp")
+    musica=interpretador(input_text,"\\temp")
     rec = Recorder()
-    path = os.getcwd()  #vai salvar na mesma pasta o qual foi executado
+    path = os.getcwd()+"\\temp.mid"  #vai salvar na mesma pasta o qual foi executado
     rec.recordMusic(musica,path)
     return
 

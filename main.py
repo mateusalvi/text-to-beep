@@ -1,5 +1,6 @@
 import interface as interface
 import fileManager as fileManager
+import audioplayer as audioplayer
 from interpreter import *
 
 def main():
@@ -13,12 +14,13 @@ def main():
             print('Debug: Tocando a musica')
             input_text = window.returnText(window)
             play(input_text)
-            window.stop(window)                                     #Ao terminar a reprodução, altera os botões ativos
+            audioplayer.AudioPlayer(os.getcwd()+"\\temp.mid").play(block=True)
+            #window.stop(window)                                     #Ao terminar a reprodução, altera os botões ativos
             print('Debug: Fim da reprodução')
 
         #Se o botão Parar música for pressionado:
         elif (window.event == "stop_button"):
-            #parar a reprodução
+            audioplayer.stop()
             print('Debug: Parou a música')
 
         #Se o botão Carregar Arquivo for pressionado:
@@ -32,8 +34,7 @@ def main():
         elif (window.event == "file_saved"):
             print('Debug: Salvando arquivo MIDI')
             filePathAndName = window.values['file_saved']
-            input_text = window.returnText(window)#!!!!!!!!! aqui vai o interpretador, no momento só salva oque está escrito na text box
-            #fileManager.operations.saveMidi(input_text, filePathAndName)
+            input_text = window.returnText(window)
             save(input_text,filePathAndName)
             print('Debug: Arquivo MIDI salvo')
 

@@ -416,7 +416,7 @@ class MIDIMusic:
         midi_config = self.__midi_config
 
         try:
-            with open(path + file_name, "wb") as binfile:
+            with open(path, "wb") as binfile:
                 midi_config.writeFile(binfile)
         
         except:
