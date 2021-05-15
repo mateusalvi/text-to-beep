@@ -1,7 +1,9 @@
 from sound import *
 import os #pra salvar o arquivo temporario na mesma pasta
 
-def interpretador(input_text):
+
+
+def interpretador(input_text,nome):
     midi_info = MIDIInfo()
     lista_instrumentos = list(midi_info.getMidiInstruments())
     l = input_text
@@ -23,7 +25,7 @@ def interpretador(input_text):
 
     volume = 100
     bpm = 100
-    nome = "teste interpretador"
+    #nome = "teste interpretador"
 
     musica = Music(l,volume,bpm,nome)
 
@@ -87,13 +89,21 @@ def interpretador(input_text):
     return musica
 
 def play(input_text):
-    musica=interpretador(input_text)
+    musica=interpretador(input_text,"temp")
     rec = Recorder()
-    path = os.getcwd() #vai salvar na mesma pasta o qual foi executado
+    path = os.getcwd()  #vai salvar na mesma pasta o qual foi executado
     rec.recordMusic(musica,path)
     return
 
+def save(input_text,path):
 
+    nome= os.path.basename(path)
+
+    print(nome)
+    musica=interpretador(input_text,nome)
+    rec = Recorder()
+    rec.recordMusic(musica,path)
+    return
 
 
 

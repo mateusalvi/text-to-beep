@@ -32,8 +32,9 @@ def main():
         elif (window.event == "file_saved"):
             print('Debug: Salvando arquivo MIDI')
             filePathAndName = window.values['file_saved']
-            MIDIinput = window.returnText(window)#!!!!!!!!! aqui vai o interpretador, no momento só salva oque está escrito na text box
-            fileManager.operations.saveMidi(MIDIinput, filePathAndName)
+            input_text = window.returnText(window)#!!!!!!!!! aqui vai o interpretador, no momento só salva oque está escrito na text box
+            #fileManager.operations.saveMidi(input_text, filePathAndName)
+            save(input_text,filePathAndName)
             print('Debug: Arquivo MIDI salvo')
 
         #!!Fecha o programa se o usuário fechar a janela, precisa estar no loop do main!!
