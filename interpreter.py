@@ -1,21 +1,22 @@
 from sound import *
-import os #usado em operações de diretórios e afins
+import os 
 
 
 
 def interpreter(input_text):
     midi_info = MIDIInfo()
     instruments_list = list(midi_info.getMidiInstruments())
-    input_text = input_text
-    x=0 #ponteiro da string input_text, irá percorrer no while
-    note = 'A' #note inicial
-    instrument = 0 #instrument inicial
-    octave = 5  #octave standard
+    x=0 #string pointer
+    note = 'A' #standard note
+    instrument = 0 #standard instrument 
+    octave = 5  # standard octave
     song_list = []
     list_of_numbers = ['1','2','3','4','5','6','7','8','9','0']
     list_of_notes = ['A','B','C','D','E','F','G']
+    
+    
     while x < len(input_text):
-    #===========================================instrumentS==============================
+    #===========================================instruments chars==============================
         if input_text[x] == "!":
             #instrument = "agogô"
             instrument = 113
@@ -37,26 +38,26 @@ def interpreter(input_text):
             instrument = 6
             x = x+1
 
-    #===========================================noteS==============================
+    #===========================================notes changes==============================
         elif input_text[x] in list_of_notes:
             note = input_text[x]
             x=x+1
-    #===========================================VOLUME==============================
+    #===========================================volume changes==============================
         elif input_text[x] == '-':
             note = '-'
             x = x + 1
         elif input_text[x] == " ":  #caso do espaço, dobra o volume
             note = " "
             x=x+1
-    #===========================================octaveS==============================
+    #===========================================octave changes==============================
         elif input_text[x] == "?":
             octave = octave+1
             x = x+1
-    #===========================================TROCA DE instrument POR NÚMERO==============================
+    #===========================================instruments changes by numbers==============================
         elif input_text[x] in list_of_numbers:   #list_of_numbers é a lista de 0,1,2,3...
             instrument = instrument + int(input_text[x])
             x = x+1
-    ##===========================================CONSOANTE / OUTROS CARACTÉRES==============================
+    ##===========================================other chars==============================
         else:
             if input_text[x-1] in list_of_notes:
                 note = input_text[x-1]
@@ -83,7 +84,7 @@ def create_music_object(input_text,name):
 def play(input_text):
     music_object=create_music_object(input_text,"\\temp")
     rec = Recorder()
-    path = os.getcwd()+"\\temp.mid"  #vai salvar na mesma pasta o qual foi executado
+    path = os.getcwd()+"\\temp.mid"  #create a temp file in the same directory
     rec.recordMusic(music_object,path)
     return
 
