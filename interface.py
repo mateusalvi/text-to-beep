@@ -22,7 +22,7 @@ class interface:
 
     def __init__(self):
         pass
-    ''''
+
     #play() altera o botão de play e demais para DESABILITADO e stop para HABILITADO. Significando que o software esta reproduzindo a musica e nao deve receber nenhum outro input alem de STOP
     def play(self):
         self.window['play_button'].update(disabled=True)
@@ -36,7 +36,7 @@ class interface:
         self.window['select_button'].update(disabled=False)
         self.window['save_button'].update(disabled=False)
         self.window['stop_button'].update(disabled=True)
-    '''
+
     def writeFileToTextBox (textFile, janela):
         if textFile != None:
             janela.__text_box.print(textFile.read())
@@ -50,12 +50,12 @@ class interface:
     #update_window(self) checa para interações com a interface e armazena em EVENT e VALUES. Em seguida é feita a alteração visual necessária na interface.
     def update_window(self):
         self.event, self.values = self.window.read()
-        '''if(self.event == "play_button"):
+        if(self.event == "play_button"):
             interface.play(self)
         elif(self.event == "stop_button"):
             interface.stop(self)
         else:
-            pass'''
+            pass
 
 
 
