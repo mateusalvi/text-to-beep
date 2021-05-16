@@ -1,7 +1,6 @@
 import unittest
 from sound import *
 
-   
 class RecorderTest(unittest.TestCase):
     song_of_healing =[  ('-',0,"ocarina"), #nota,oitava,instrumento
                         ('-',0,"ocarina"), 
@@ -255,91 +254,3 @@ class MIDIMusicTest(unittest.TestCase):
 
 if __name__ == "__main__":
      unittest.main()
-
-
-#Exemplo de uso 1
-'''
-#Música no formato de lista de tuplas (lista de sons), seguindo o modelo (nota/comando, oitava, instrumento)
-song_of_healing =[  ('-',0,"ocarina"), 
-                    ('-',0,"ocarina"), 
-                    ('B',5,"ocarina"), 
-                    ('-',0,"ocarina"), 
-                    ('G',5,"ocarina"), 
-                    ('-',0,"ocarina"),
-                    ('D',5,"ocarina"),
-                    ('-',0,"ocarina"),
-                    ('-',0,"ocarina"), 
-                    ('-',0,"ocarina"), 
-                    ('B',5,"ocarina"), 
-                    ('-',0,"ocarina"), 
-                    ('G',5,"ocarina"), 
-                    ('-',0,"ocarina"),
-                    ('D',5,"ocarina"),
-                    ('-',0,"ocarina"),
-                    ('-',0,"ocarina"),
-                    ('-',0,"ocarina"),
-                    ('B',5,"ocarina"), 
-                    ('-',0,"ocarina"), 
-                    ('G',5,"ocarina"), 
-                    ('-',0,"ocarina"),
-                    ('D',5,"ocarina"),
-                    ('C',5,"ocarina"),
-                    ('D',5,"ocarina"),
-                    ('-',0,"ocarina"), 
-                    ('-',0,"ocarina"),
-                    ('-',0,"ocarina"), 
-                    ('B',5,"ocarina"), 
-                    ('-',0,"ocarina"), 
-                    ('G',5,"ocarina"), 
-                    ('-',0,"ocarina"),
-                    ('D',5,"ocarina"),
-                    ('-',0,"ocarina"),
-                    ('-',0,"ocarina"), 
-                    ('-',0,"ocarina"), 
-                    ('B',5,"ocarina"), 
-                    ('-',0,"ocarina"), 
-                    ('G',5,"ocarina"), 
-                    ('-',0,"ocarina"),
-                    ('D',5,"ocarina"),
-                    ('-',0,"ocarina"),
-                    ('-',0,"ocarina"),
-                    ('-',0,"ocarina"),
-                    ('B',5,"ocarina"), 
-                    ('-',0,"ocarina"), 
-                    ('G',5,"ocarina"), 
-                    ('-',0,"ocarina"),
-                    ('D',5,"ocarina"),
-                    ('C',5,"ocarina"),
-                    ('D',5,"ocarina")]
-
-#Criação do objeto Music/Música, passando a lista de sons, volume, BPM e o nome do arquivo
-tururu = Music(song_of_healing, 50, 120, "Tururu")
-
-#Caminho onde o arquivo deve ser salvo
-path = "D:\\Arthur\\Área de Trabalho\\"
-
-#Cria uma instância de Recorder/Gravador
-recorder = Recorder()
-
-#Manda gravar passando a Música e o caminho
-recorder.recordMusic(tururu, path)
-'''
-
-#Exemplo de uso 2
-'''
-teste_volume = [("C", 5, "ocarina"),
-                (" ", 5, "ocarina"),
-                ("C", 5, "ocarina"),
-                (" ", 5, "ocarina"),
-                ("C", 5, "ocarina"),
-                (" ", 5, "ocarina"),
-                ("C", 5, "ocarina"),
-                ("C", 5, "ocarina"),
-                ("C", 5, "ocarina")]
-
-tst = Music(teste_volume, 50, 30, "Teste_volume")
-path = "D:\\Arthur\\Área de Trabalho\\"
-
-recorder = Recorder()
-recorder.recordMusic(tst, path)
-'''

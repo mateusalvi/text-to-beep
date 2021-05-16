@@ -421,4 +421,3 @@ class MIDIMusic:
         
         except:
             print("Invalid MIDI Config!")
-

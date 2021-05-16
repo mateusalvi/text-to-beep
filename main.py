@@ -1,30 +1,39 @@
 import interface as interface
-import fileManager as fileManager
 import audioplayer as audioplayer
-import programa
-import threading
-import player
 from interpreter import *
+from PySimpleGUI.PySimpleGUI import R
 
 def main():
-    #cria uma lista de threads
-    threads = []
+    window = interface.interface
+    
+    while True:
+        window.update_window(window)#Checa e atualiza eventos e entradas na interface
 
-    #cria uma thread com o programa
-    t = threading.Thread(target=programa.programa())
-    #adiciona a thread à lista
-    threads.append(t)
-    #inicia a thread (e.g. executa Programa)
-    t.start()
+        #Se o botão Tocar música for pressionado:
+        if (window.event == "play_button"):
+            input_text = window.returnText(window)
+            interpretToPlay(input_text)
+            musicPlayer = audioplayer.AudioPlayer(os.getcwd()+"\\temp.mid") #inicializa o player
+            musicPlayer.play()
 
-    #cria uma trhead para o Player de musica, que ficara rodando sem executar nada e faz as mesmas coisas de antes de adicionar a lista e iniciar
-    t = threading.Thread(target=player())
-    threads.append(t)
-    t.start()
+        #Se o botão Parar música for pressionado:
+        elif (window.event == "stop_button"):
+            musicPlayer.stop()
+            musicPlayer.close() #Finaliza o music player
 
-    #fecha as threads
-    for process in threads:
-    	process.join()
+        #Se o botão Carregar Arquivo for pressionado:
+        elif (window.event == "file_selected"):
+            window.writeFileToTextBox(window)
+
+        #Se o botão Salvar MIDI for pressionado:
+        elif (window.event == "file_saved"):
+            filePathAndName = window.values['file_saved']
+            input_text = window.returnText(window)
+            interpretToSave(input_text,filePathAndName)
+
+        #!!Fecha o programa se o usuário fechar a janela, precisa estar no loop do main!!
+        elif (window.event == interface.sg.WIN_CLOSED):
+            break        
         
 if __name__ == "__main__":
     main()
