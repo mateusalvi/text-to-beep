@@ -3,7 +3,7 @@ from sound import *
 
    
 class RecorderTest(unittest.TestCase):
-    song_of_healing =[  ('-',0,"ocarina"), #nota,oitava,instrumento
+    song_of_healing =[  ('-',0,"ocarina"), # nota,oitava,instrumento
                         ('-',0,"ocarina"), 
                         ('B',5,"ocarina"), 
                         ('-',0,"ocarina"), 
