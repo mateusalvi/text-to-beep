@@ -32,7 +32,7 @@ class Music:
     def getSounds(self):
         return self.__sounds
 
-    def toString(self): # tostring pra debugar
+    def toString(self): # for debug purposes
         print("=============================================================================")
         print("tupla de sons: " + str(self.__sounds))
         print("ultima elemento da tupla: " + str(self.__sounds[len(self.__sounds) - 1]))
@@ -82,6 +82,15 @@ class MIDIInfo:
 
         finally:
             return midi_note_code
+    
+    def isValidOctave_LIMIT(self,octave,defaultOctaveSelect):
+        if octave >= Constants.OCTAVE_LIMIT:
+            octave = defaultOctaveSelect
+            return octave
+        else:
+            return octave
+    
+    
     
     def __isValidMIDINote(self, note_code):
         if (type(note_code) == int):

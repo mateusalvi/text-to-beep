@@ -26,12 +26,13 @@ def interpreter(input_text, defaultOctaveSelect):
         elif input_text[x] == '-':
             note = '-'
             x = x + 1
-        elif input_text[x] == " ":  #caso do espaço, dobra o volume
+        elif input_text[x] == " ":
             note = " "
             x = x + 1
     #===========================================octave changes==============================
         elif input_text[x] == "?":
             octave = octave + 1
+            octave=MIDIInfo.isValidOctave_LIMIT(MIDIInfo,octave,defaultOctaveSelect)
             x = x + 1
     #================================instruments changes by numbers=========================
         elif input_text[x] in Constants.LIST_OF_NUMBERS:

@@ -4,6 +4,7 @@ class Constants:
     DEFAULT_BPM = 100
     LIST_OF_NUMBERS = ['1','2','3','4','5','6','7','8','9','0']
     LIST_OF_NOTES = ['A','B','C','D','E','F','G']
+    OCTAVE_LIMIT = 10
     INSTRUMENTS = { 
         "acoustic grand piano": 0,
         "bright acoustic piano": 1,
