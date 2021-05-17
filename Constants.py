@@ -3,7 +3,7 @@ class Constants:
     DEFAULT_INSTRUMENT = 0
     DEFAULT_OCTAVE = 5
     DEFAULT_VOLUME = 100
-    DEFAULT_BPM = 5
+    DEFAULT_BPM = 100
     LIST_OF_NUMBERS = ['1','2','3','4','5','6','7','8','9','0']
     LIST_OF_NOTES = ['A','B','C','D','E','F','G']
     INSTRUMENTS = { 
