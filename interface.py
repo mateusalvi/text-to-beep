@@ -11,7 +11,8 @@ class interface:
     __save_button = sg.FileSaveAs('Exportar MIDI', font = 'Helvetica', key = 'save_button',default_extension = ".MIDI", file_types = (("MIDI Files", "*.midi"), ))
     __text_box = sg.Multiline(default_text = '', size = (75, 25), font = 'Helvetica', key = 'text_box')
     __octave_select = sg.Spin([i for i in range(1,10)], initial_value=5, font = 'Helvetica', key='octave_select', size=(2,1))
-    __volume_slider = sg.Slider(range=(0,100), default_value=50, size=(15,15), orientation='horizontal', font=('Helvetica', 12), key='volume_slider')
+    __bpm_select = sg.Spin([i for i in range(1,180)], initial_value=80, font = 'Helvetica', key='bpm_select', size=(3,1))
+    __volume_slider = sg.Slider(range=(0,100), default_value=50, size=(16,15), orientation='horizontal', font=('Helvetica', 12), key='volume_slider')
     # Definição do layout da interface
     layout = [
         [sg.Text(" ", size = (10, 1))],
@@ -22,9 +23,11 @@ class interface:
         [__text_box],
         [sg.Text(" ", size = (10, 1))],
         [
-            sg.Text("Oitava inicial: ", size = (11, 1), font=('Helvetica', 12)),
+            sg.Text("Oitava inicial:", size = (10, 1), font=('Helvetica', 12)),
             __octave_select,
-            sg.Text(" ", size = (22, 1), pad='20'),
+            sg.Text("BPM inicial:", size = (9, 1), font=('Helvetica', 12)),
+            __bpm_select,
+            sg.Text(" ", size = (6, 1), pad='20'),
             __play_button, 
             sg.Text(" ", size = (10, 2)),
             __stop_button
@@ -55,6 +58,7 @@ class interface:
         self.window['octave_select'].update(disabled = True)
         self.window['select_button'].update(disabled = True)
         self.window['save_button'].update(disabled = True)
+        self.window['bpm_select'].update(disabled = True)
         self.window['stop_button'].update(disabled = False)
 
     # Altera os estados dos botões
@@ -64,6 +68,7 @@ class interface:
         self.window['octave_select'].update(disabled = False)
         self.window['select_button'].update(disabled = False)
         self.window['save_button'].update(disabled = False)
+        self.window['bpm_select'].update(disabled = False)
         self.window['stop_button'].update(disabled = True)
 
     # Carrega um arquivo texto para a caixa de texto de entrada
@@ -87,6 +92,9 @@ class interface:
     
     def getDefaultOctaveSelect(self):
         return int(self.values['octave_select'])
+
+    def getDefaultBPMSelect(self):
+        return int(self.values['bpm_select'])
 
     # update_window(self) checa para interações com a interface e armazena em EVENT e VALUES. Em seguida é feita a alteração visual necessária na interface.
     def update_window(self):

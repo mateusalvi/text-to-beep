@@ -12,7 +12,7 @@ def main():
         # Se o botão Tocar música for pressionado:
         if (window.event == "play_button"):
             input_text = window.returnText(window)
-            interpretToPlay(input_text, window.getDefaultVolumeSelect(window), window.getDefaultOctaveSelect(window))
+            interpretToPlay(input_text, window.getDefaultVolumeSelect(window), window.getDefaultOctaveSelect(window), window.getDefaultBPMSelect(window))
             musicPlayer = audioplayer.AudioPlayer(os.getcwd() + "\\temp.mid") # inicializa o player
             musicPlayer.play()
 
@@ -29,7 +29,7 @@ def main():
         elif (window.event == "file_saved"):
             filePathAndName = window.values['file_saved']
             input_text = window.returnText(window)
-            interpretToSave(input_text, filePathAndName, window.getDefaultVolumeSelect(window), window.getDefaultOctaveSelect(window))
+            interpretToSave(input_text, filePathAndName, window.getDefaultVolumeSelect(window), window.getDefaultOctaveSelect(window), window.getDefaultBPMSelect(window))
 
         # Fecha o programa se o usuário fechar a janela, precisa estar no loop do main!!
         elif (window.event == interface.sg.WIN_CLOSED):

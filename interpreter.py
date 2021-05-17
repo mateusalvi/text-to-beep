@@ -54,22 +54,22 @@ def interpreter(input_text, defaultOctaveSelect):
 
     return song_list
 
-def create_music_object(input_text, name, defaultVolumeSelect, defaultOctaveSelect):
+def create_music_object(input_text, name, defaultVolumeSelect, defaultOctaveSelect, defaultBPMSelect):
     song_list = interpreter(input_text, defaultOctaveSelect)
-    obj_music_object = Music(song_list, defaultVolumeSelect, Constants.DEFAULT_BPM, name)
+    obj_music_object = Music(song_list, defaultVolumeSelect, defaultBPMSelect, name)
     return obj_music_object
 
-def interpretToPlay(input_text, defaultVolumeSelect, defaultOctaveSelect):
-    music_object = create_music_object(input_text, "\\temp.mid", defaultVolumeSelect, defaultOctaveSelect)
+def interpretToPlay(input_text, defaultVolumeSelect, defaultOctaveSelect, defaultBPMSelect):
+    music_object = create_music_object(input_text, "\\temp.mid", defaultVolumeSelect, defaultOctaveSelect, defaultBPMSelect)
     rec = Recorder()
     path = os.getcwd() + "\\temp.mid"
     rec.recordMusic(music_object, path)
     return
 
-def interpretToSave(input_text, path, defaultVolumeSelect, defaultOctaveSelect):
+def interpretToSave(input_text, path, defaultVolumeSelect, defaultOctaveSelect, defaultBPMSelect):
     name = os.path.basename(path)
     print(name)
-    music_object = create_music_object(input_text, name, defaultVolumeSelect, defaultOctaveSelect)
+    music_object = create_music_object(input_text, name, defaultVolumeSelect, defaultOctaveSelect, defaultBPMSelect)
     rec = Recorder()
     rec.recordMusic(music_object, path)
     return
