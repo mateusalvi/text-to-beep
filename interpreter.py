@@ -2,13 +2,13 @@ from sound import *
 from Constants import *
 import os
 
-def interpreter(input_text):
+def interpreter(input_text, defaultOctaveSelect):
     midi_info = MIDIInfo()
     instruments_list = list(Constants.INSTRUMENTS)
     x = 0 # string pointer
     note = Constants.DEFAULT_NOTE
     instrument = Constants.DEFAULT_INSTRUMENT
-    octave = Constants.DEFAULT_OCTAVE
+    octave = defaultOctaveSelect
     song_list = []
     
     
@@ -50,22 +50,22 @@ def interpreter(input_text):
 
     return song_list
 
-def create_music_object(input_text,name):
-    song_list = interpreter(input_text)
-    obj_music_object = Music(song_list, Constants.DEFAULT_VOLUME, Constants.DEFAULT_BPM, name)
+def create_music_object(input_text, name, defaultVolumeSelect, defaultOctaveSelect):
+    song_list = interpreter(input_text, defaultOctaveSelect)
+    obj_music_object = Music(song_list, defaultVolumeSelect, Constants.DEFAULT_BPM, name)
     return obj_music_object
 
-def interpretToPlay(input_text):
-    music_object = create_music_object(input_text, "\\temp.mid")
+def interpretToPlay(input_text, defaultVolumeSelect, defaultOctaveSelect):
+    music_object = create_music_object(input_text, "\\temp.mid", defaultVolumeSelect, defaultOctaveSelect)
     rec = Recorder()
     path = os.getcwd() + "\\temp.mid"
     rec.recordMusic(music_object, path)
     return
 
-def interpretToSave(input_text, path):
+def interpretToSave(input_text, path, defaultVolumeSelect, defaultOctaveSelect):
     name = os.path.basename(path)
     print(name)
-    music_object = create_music_object(input_text, name)
+    music_object = create_music_object(input_text, name, defaultVolumeSelect, defaultOctaveSelect)
     rec = Recorder()
     rec.recordMusic(music_object, path)
     return
