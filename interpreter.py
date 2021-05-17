@@ -38,6 +38,7 @@ def interpreter(input_text, defaultOctaveSelect):
         elif input_text[x] in Constants.LIST_OF_NUMBERS:
             instrument = instrument + int(input_text[x])
             x = x + 1
+            continue
     ##===========================================other chars================================
         else:
             if input_text[x-1] in Constants.LIST_OF_NOTES:
