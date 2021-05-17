@@ -17,6 +17,7 @@ def interpreter(input_text, defaultOctaveSelect):
         if input_text[x] in Constants.INSTRUMENT_MAPPINGS:
             instrument = Constants.INSTRUMENT_MAPPINGS[input_text[x]]
             x = x + 1
+            continue
 
     #===========================================notes changes==============================
         elif input_text[x] in Constants.LIST_OF_NOTES:
@@ -34,6 +35,7 @@ def interpreter(input_text, defaultOctaveSelect):
             octave = octave + 1
             octave=MIDIInfo.isValidOctave_LIMIT(MIDIInfo,octave,defaultOctaveSelect)
             x = x + 1
+            continue
     #================================instruments changes by numbers=========================
         elif input_text[x] in Constants.LIST_OF_NUMBERS:
             instrument = instrument + int(input_text[x])
